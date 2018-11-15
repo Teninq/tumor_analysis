@@ -1,0 +1,12 @@
+#!/bin/bash
+len=$#
+if [ $len != "1" ];then
+echo ""
+echo "Usage annovar.SNP test.vcf"
+echo ""
+exit 0
+fi
+vcf_file=$1
+annovar_file=${vcf_file/.vcf/.annovar}
+perl /media/_EXTend2016/Project_s846x10001-3/annovar/convert2annovar.pl --includeinfo -format vcf4 $vcf_file >$annovar_file
+perl /media/_EXTend2016/Project_s846x10001-3/annovar/table_annovar.pl --otherinfo  $annovar_file /media/_EXTend2016/Project_s846x10001-3/annovar/humandb/ -buildver hg19  -protocol refGene,ensGene,1000g2012apr_asn,clinvar_20150629,snp138,ljb26_all,dbnsfp31a_interpro,exac03nontcga,cosmic70,gwava,mcap,tfbsConsSites,dbscsnv11,spidex,gnomad_genome  -operation g,g,f,f,f,f,f,f,f,f,f,r,f,f,f -nastring .

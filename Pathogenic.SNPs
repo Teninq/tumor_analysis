@@ -1,0 +1,19 @@
+#!/bin/bash
+len=$#
+if [ $len != "4" ];then
+echo ""
+echo "Usage Pathogenic.SNPs annovar.hg19.multi_anno.txt 1.txt 0.001 output.txt"
+echo ""
+exit 0
+fi
+
+in=$1
+out=$2
+maf=$3
+hc_out=$4
+
+grep -P "\texonic\t|\texonic;|\texonic;splicing\t|\tsplicing\t" $in | grep -P -v "\tsynonymous|\tnonframeshift" >$out
+grep -P "\tUTR5|\tUTR3|\tupstream|\texonic\t|\texonic;|\texonic;splicing\t|\tsplicing\t" $in | grep -P -v "\tsynonymous|\tnonframeshift" | grep -v upstream >$out
+grep -P "frameshift|nonsynonymous|stopgain|stoploss|splicing" $in | grep -P  -v  "ncRNA" >$out
+Rscript /media/_EXTend2016/0410/post-scripts/postprocess.R $in $out $maf $hc_out
+
